@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryq.coldstoragesystem.mapper.ExportListMapper">
+
+    <insert id="insertExportList">
+        insert into export_list(item_name,item_weight,item_volume,warehousing_date,export_date,operator,storage_time,all_cost,consignee,contact_information,receive_address,lat,lng,delivery_mode,deliver_cost,status,distance,temp_id,amount_cost) values(#{itemName},#{itemWeight},#{itemVolume},#{warehousingDate},#{exportDate},#{operator},#{storageTime},#{allCost},#{consignee},#{contactInformation},#{receiveAddress},#{lat},#{lng},#{deliveryMode},#{deliverCost},#{status},#{distance},#{tempId},#{amountCost})
+    </insert>
+    <update id="updateStatusById">
+        update export_list set status=#{status} where id=#{id}
+    </update>
+
+    <select id="selectAllByUsername" resultType="com.ryq.coldstoragesystem.bean.ExportList">
+        select * from export_list where operator=#{userName}
+    </select>
+    <select id="selectAllById" resultType="com.ryq.coldstoragesystem.bean.ExportList">
+        select * from export_list where id=#{id}
+    </select>
+    <select id="selectByTempId" resultType="com.ryq.coldstoragesystem.bean.ExportList">
+        select * from export_list where temp_id=#{arg0}
+    </select>
+    <select id="selectByItemNameAndOperator" resultType="com.ryq.coldstoragesystem.bean.ExportList">
+        select * from export_list where item_name like "%"#{arg0}"%" and operator=#{arg1}
+    </select>
+    <select id="selectByRoomCodeAndOperator" resultType="com.ryq.coldstoragesystem.bean.ExportList">
+        select * from export_list where room_code like "%"#{arg0}"%" and operator=#{arg1}
+    </select>
+
+</mapper>

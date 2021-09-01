@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>新增冷藏信息</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+
+</head>
+<style>
+    #step1{
+        display:block;
+        margin-top: 30px;
+        margin-right: 20px;
+    }
+    #step2,#step3,#step4,#step5{
+        display: none;
+        margin-top: 30px;
+        margin-right: 20px;
+    }
+    #step1,#step2,#step3,#step4,#step5{
+        position: absolute;
+        width: 100%;
+        height: 40%;
+        left: 2%;
+        top:10%;
+    }
+</style>
+<body>
+<!--<script src="/vendor/jquery/jquery.min.js"></script>-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=VovYGooPZpSU7yqTG1GeukhP1UVibGK2"></script>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div id="step1">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">货物基本信息</h3>
+                        </div>
+                        <div class="panel-body">
+<!--                            <form action="/itemsmanualsave" method="get">-->
+                            <p>
+                                <label>名&emsp;&emsp;称：</label><input type="text" id="itemName" name="itemName" th:if="${currentdata}" th:value="${currentdata.getItemName()}" placeholder="小于16位"/>
+                            </p>
+                            <p>
+                                <label>货物长度：</label><input type="text" id="length" name="length" th:value="${currentdata.getLength()}">&emsp;<label>m</label>
+                            </p>
+                            <p>
+                                <label>货物宽度：</label><input type="text" id="width" name="width" th:value="${currentdata.getWidth()}">&emsp;<label>m</label>
+                            </p>
+                            <p>
+                                <label>货物高度：</label><input type="text" id="height" name="height" th:value="${currentdata.getHeight()}">&emsp;<label>m</label>
+                            </p>
+                            <p>
+                                <label>货物容积：</label><input type="text" id="roomVolume" name="roomVolume" th:value="${currentdata.getVolume()}" readonly>&emsp;<label>m³</label>
+                            </p>
+                            <p>
+                                <label>标&emsp;&emsp;签：</label>
+                                <label>
+                                    <select id="roomLabelCode" name="roomLabelCode">
+                                        <option th:each="item:${labelinformation}"
+                                                th:value="${item.getRoomLabelCode()}"
+                                                th:text="${item.getRoomLabelName()}"></option>
+                                    </select>
+                                </label>
+                            </p>
+                            <button type="button" id="toSecondStep" class="btn btn-success" onclick="getnext('step2')" >下一步</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="step2">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">运输方式</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                <label>
+                                    <input type="radio" onclick="acheck1()" name="send" value="1">独立配送
+                                </label>
+                                <label>
+                                    <input type="radio" onclick="acheck2()" name="send" checked="checked"  value="2">推荐配送
+                                </label>
+                            </p>
+                            <p>
+                                <label>选择库房：</label>
+                                <label>
+                                    <select id="roomCode" name="roomCode">
+                                    </select>
+                                </label>
+                                &emsp;<label id="volume"></label><label>m³</label>
+                            </p>
+                            <p>
+                                <label>存储费用：</label>
+                                <label>
+                                    <input type="text" id="roomCost" name="roomCost" readonly>&emsp;<label>元/天</label>
+                                </label>
+                            </p>
+                            <div id="self-send" style="display: none">
+                                <label>请于工作日（9:00-16:00）来<label id="selfExInformation" text=""></label>自提货物。</label>
+                            </div>
+                            <div id="commend-send">
+                                <p>
+                                    <label>货物地址：</label>
+                                    <input id="where" name="where" type="text" >
+                                    <input class="btn btn-primary" type="button" value="点击搜索" onClick="sear(document.getElementById('where').value);">
+                                </p>
+                                <br>
+                                <div id="mapContainer" style="width: 300px;height: 230px"></div>
+                                <br>
+                                <p>
+                                    <label>路程距离：</label><input type="text" id="distance" name="distance" readonly>&emsp;<label>公里</label>
+                                </p>
+                                <p>
+                                    <label>预估价格：</label><input type="text" id="cost" name="cost" readonly>&emsp;<label>元</label>
+                                </p>
+                                <p>
+                                    <label>配送司机：</label><input type="text" id="driver" name="driver" value="李师傅" readonly>
+                                </p>
+                                <p>
+                                    <label>联系方式：</label><input type="text" id="contact" name="contact" value="1597534862" readonly>
+                                </p>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="getnext('step1')">上一步</button>
+                            <button type="button" id="toThirdStep" class="btn btn-success" onclick="getnext('step3')">下一步</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="step3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">库房审核信息</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                &emsp;&emsp;<label>审&emsp;&emsp;查：</label>
+                                <label>
+                                    <select id="inspector" name="inspector">
+                                        <option th:each="itemss:${inspectors}"
+                                                th:value="${itemss.getUserName()}"
+                                                th:text="${itemss.getUserName()}"></option>
+                                    </select>
+                                </label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>备&emsp;&emsp;注：</label>
+                                <label>
+                                    <textarea name="comment" id="comment" cols="20" rows="5" placeholder="输入小于40字" maxlength="40" style="resize: none;vertical-align:top" th:if="${currentdata}" th:value="${currentdata.getComment()}"></textarea>
+                                </label>
+                            </p>
+<!--                            <p>-->
+<!--                                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" id="sub" value="手动上传"/>&emsp;&emsp;<input type="reset" value="重置" th:value="重置">-->
+<!--                            </p>-->
+<!--                            </form>-->
+                            <button type="button" class="btn btn-primary" onclick="getnext('step2')">上一步</button>
+                            <button type="button" id="toForthStep" class="btn btn-success" onclick="getnext('step4')">下一步</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="step4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">申请单汇总</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                <label>名&emsp;&emsp;称：</label><input type="text" id="iName" name="iName" readonly/>
+                            </p>
+                            <p>
+                                <label>货物体积：</label><input type="text" id="iVolume" readonly>&emsp;<label>m³</label>
+                            </p>
+                            <p>
+                                <label>配送方式：</label><input type="text" id="iSendMode" readonly>&emsp;<label>m³</label>
+                            </p>
+                            <p>
+                                <label>存储仓库：</label><input type="text" id="iRoom" readonly>&emsp;<label>m³</label>
+                            </p>
+                            <p>
+                                <label>仓库花费：</label><input type="text" id="iRoomCost" readonly>&emsp;<label>元/天</label>
+                            </p>
+                            <p>
+                                <label>配送花费：</label><input type="text" id="iCost" readonly>&emsp;<label>元</label>
+                            </p>
+                            <p>
+                                <input type="hidden" id="iLng" name="iLng">
+                                <input type="hidden" id="iLat" name="iLat">
+                                <input type="hidden" id="iRoomCode">
+                            </p>
+                            <div id="sender" style="display: none">
+                                <p>
+                                    <label>配送司机：</label><input type="text" id="iDriver" value="李师傅" readonly>
+                                </p>
+                                <p>
+                                    <label>联系方式：</label><input type="text" id="iContact" value="1597534862" readonly>
+                                </p>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="getnext('step3')">上一步</button>
+                            <button type="button" id="submitApplication" class="btn btn-success" onclick="">提交审核</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var len=0,wid=0,high=0;
+        $( '#length' ).on( 'input propertychange' ,  function () {
+            len = $("#length").val();
+            console.log(len);
+            if (parseInt(len)*parseInt(wid)*parseInt(high) != 0){
+                $("#roomVolume").val(parseInt(len)*parseInt(wid)*parseInt(high));
+            }else{
+                $("#roomVolume").val(0);
+            }
+        });
+        $( '#width' ).on( 'input propertychange' ,  function () {
+            wid = $("#width").val();
+            console.log(wid);
+            if (parseInt(len)*parseInt(wid)*parseInt(high) != 0){
+                $("#roomVolume").val(parseInt(len)*parseInt(wid)*parseInt(high));
+            }else{
+                $("#roomVolume").val(0);
+            }
+        });
+        $( '#height' ).on( 'input propertychange' ,  function () {
+            high = $("#height").val();
+            console.log(high);
+            if (parseInt(len)*parseInt(wid)*parseInt(high) != 0){
+                $("#roomVolume").val(parseInt(len)*parseInt(wid)*parseInt(high));
+            }else{
+                $("#roomVolume").val(0);
+            }
+        });
+    });
+    //页面下一步提交逻辑
+    function getnext(i){
+        //alert(i);
+        var sz=["step1","step2","step3","step4"];
+        for(var j=0;j<sz.length;j++){
+            if(i==sz[j]){
+                document.getElementById(i).style.display="block";
+            }else{
+                document.getElementById(sz[j]).style.display="none";
+            }
+        }
+    }
+    //切换接收货物方式
+    function acheck1(){
+        $("#self-send").show();
+        $("#commend-send").hide();
+        // $("#sender").style.display="none";
+        // $("#customName").val("");
+        // $("#contact").val("");
+        // $("#where").val("");
+        // $("input[name='consignee']").val("");
+        // $("input[name='contactInformation']").val("");
+        // $("input[name='receiveAddress']").val("");
+    }
+    function acheck2(){
+        $("#self-send").hide();
+        $("#commend-send").show();
+        // $("#sender").style.display="block";
+    }
+    //存储得到的库房值
+    var datas;
+    //得到货物基本信息后进行选择库房
+    $("#toSecondStep").on("click",function () {
+        var roomLabelCode = $("#roomLabelCode option:selected").val();
+        console.log(roomLabelCode);
+        $.ajax({
+            type:"POST",
+            url:"/selectbylabelcode",
+            data:{
+                roomLabelCode: roomLabelCode
+            },
+            traditional: false,
+            datatype: "json",
+            success:function (data) {
+                $("#roomCode").empty();
+                console.log(data);
+                if(data===""){
+                    alert("无相应冷库，请重新申请！");
+                    window.location.href="/returntoindex";
+                }
+                datas=data;
+                console.log(data);
+                $.each(data,function (index,element) {
+                    $("#roomCode").append("<option id='"+element.roomCode+"' name='"+element.roomCode+"' value='"+element.roomCode+"'>"+element.roomName+"</option>");
+                });
+                $("#volume").text(data[0]['roomVolume']);
+                $("#roomCost").val(data[0]['roomDailyCost']);
+                $("#iRoom").val(data[0]['roomName']);
+                $("#iRoomCode").val(data[0]['roomCode']);
+                $("#iRoomCost").val(data[0]['roomDailyCost']);
+                $("#selfExInformation").text(data[0]['address']);
+            },
+            error:function (data) {
+                alert("服务器连接错误！");
+            }
+        });
+        //填写入库申请单
+        var itemName = $("#itemName").val();
+        var volume = $("#roomVolume").val();
+        $("#iName").val(itemName);
+        $("#iVolume").val(volume);
+
+    });
+    //修改下拉框
+    $("#roomCode").on("change",function () {
+        var roomCode = $("#roomCode option:selected").val();
+        $.each(datas,function (index,element) {
+            if (roomCode == element.roomCode){
+                $("#roomCost").val(element.roomDailyCost);
+                $("#iRoom").val(element.roomName);
+                $("#iRoomCode").val(element.roomCode);
+                $("#iRoomCost").val(element.roomDailyCost);
+                $("#selfExInformation").text(element.address);
+                $("#volume").text(element.roomVolume);
+            }
+        });
+
+    });
+    //最后一步前
+    $("#toForthStep").on("click",function () {
+        if ($("input:radio[name='send']:checked").val()=='1') {
+            $("#iSendMode").val("独立配送");
+            $("#iCost").val(0);
+            $("#sender").hide();
+        }else{
+            $("#iSendMode").val("推荐配送");
+            var iCost = $("#cost").val();
+            $("#iCost").val(iCost);
+            $("#sender").show();
+        }
+    });
+    //地图相关事件
+    //var map = new BMap.Map("allmap");
+    //设置中心点坐标
+    var point = new BMap.Point(114.512365,38.041735);
+    //初始化地图
+    /**
+     *地图类型：
+     *普通地图：BMAP_NORMAL_MAP
+     *卫星地图：BMAP_HYBRID_MAP
+     */
+    var map = new BMap.Map("mapContainer",{mapType:BMAP_NORMAL_MAP,minZoom:1,maxZoom:18}); //设置地图类型及最小最大级别
+    //设置地图级别（1-18）
+    map.centerAndZoom(point,12);
+    //开启滚轮缩放地图
+    map.enableScrollWheelZoom();
+    //进行浏览器定位
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        // 定位成功事件
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            //alert('您的位置：'+r.point.lng+','+r.point.lat);
+            var point = new BMap.Point(r.point.lng, +r.point.lat);
+        }
+    },{enableHighAccuracy: true});
+
+    //addEventListener--添加事件监听函数
+    //click--点击事件获取经纬度
+
+    var geoc = new BMap.Geocoder();
+    //计算距离
+    var allDistance=0;
+    var lng=0,lat=0;
+    var addComp;
+    map.addEventListener("click",function(e){
+        map.clearOverlays();
+        var pt = new BMap.Point(e.point.lng, e.point.lat);
+        var marker = new BMap.Marker(pt);
+        // 将标注添加到地图中
+        map.addOverlay(marker);
+        lng=e.point.lng;
+        lat=e.point.lat;
+        $("input[name='iLng']").val(lng);
+        $("input[name='iLat']").val(lat);
+        //prompt("鼠标单击地方的经纬度为：",e.point.lng + "," + e.point.lat);
+        // $("input[name='where']").val(address);
+        geoc.getLocation(pt, function(rs){
+            addComp = rs.addressComponents;
+            // alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+            $("input[name='where']").val(addComp.province  + addComp.city  + addComp.district  + addComp.street  + addComp.streetNumber);
+            $("input[name='receiveAddress']").val(addComp.province  + addComp.city  + addComp.district  + addComp.street  + addComp.streetNumber);
+        });
+        //计算距离
+        var searchComplete = function (results){
+            if (transit.getStatus() != BMAP_STATUS_SUCCESS){
+                return ;
+            }
+            var plan = results.getPlan(0);
+            //output += plan.getDuration(true) + "\n";                //获取时间
+            //output += "总路程为：" ;
+            allDistance = plan.getDistance(true);             //获取距离
+            $("input[name='distance']").val(allDistance);
+            $("input[name='cost']").val((parseInt(allDistance)*2.3).toFixed(1));
+            $("#iCost").val((parseInt(allDistance)*2.3).toFixed(1));
+        };
+        var transit = new BMap.DrivingRoute(map, {renderOptions: {map: map},
+            onSearchComplete: searchComplete,
+            onPolylinesSet: function(){
+                setTimeout(function(){},"1000");
+            }});
+        //获取当前库房编号
+        var roomCode = $("#roomCode option:selected").val();
+        $.ajax({
+            type: "POST",
+            url: "/getroombyroomcode",
+            data:{
+                roomCode: roomCode
+            },
+            traditional: false,
+            datatype: "json",
+            success:function (data) {
+                console.log(data[0]["lng"]);
+                var end=new BMap.Point(data[0]["lng"],data[0]["lat"]);
+                var start=new BMap.Point(lng,lat);
+                transit.search(start, end);
+            },
+            error:function (data) {
+                alert("服务器错误！");
+            }
+
+        });
+    });
+
+    function sear(result){//地图搜索
+        var local = new BMap.LocalSearch(map, {
+            renderOptions:{map: map}
+        });
+        var search = local.search(result);
+    }
+
+    /*
+        点击提交后的事件，1，判断数据合法性，2，上传数据
+     */
+    $("#submitApplication").on("click",function () {
+        var itemName = $("#iName").val();
+        var length = $("#length").val();
+        var width = $("#width").val();
+        var height = $("#height").val();
+        var volume = $("#iVolume").val();
+        var roomName = $("#iRoom").val();
+        var sendMode = $("#iSendMode").val();
+        var sendCost = 0;
+        var lng = $("#iLng").val();
+        var lat = $("#iLat").val();
+        var roomCode = $("#iRoomCode").val();
+        var inspector = $("#inspector option:selected").val();
+        var roomLabelCode = $("#roomLabelCode option:selected").val();
+        var comment = $("#comment").val();
+        var sender = "";
+        var contact = "";
+        if($("#sender").is(":visible")){
+            sender = $("#iDriver").val();
+            contact = $("#iContact").val();
+            sendCost = $("#cost").val();
+        }
+        if (itemName == null||itemName===""||!isNaN(itemName)){
+            alert("请输入正确的货物名称！"+itemName);
+            return false;
+        }
+        else if (volume == null||volume===""||isNaN(volume)){
+            alert("请输入正确的货物数据!");
+            return false;
+        }else if (sendCost == null||sendCost===""||isNaN(sendCost)){
+            alert("请选择正确的货物地址！")
+        }else {
+            $.ajax({
+                type:"POST",
+                url:"/itemsmanualsave",
+                data:{
+                    "itemName":itemName,
+                    "length":length,
+                    "width":width,
+                    "height":height,
+                    "volume":volume,
+                    "roomName":roomName,
+                    "sendMode":sendMode,
+                    "sendCost":sendCost,
+                    "lng":lng,
+                    "lat":lat,
+                    "roomCode":roomCode,
+                    "sender":sender,
+                    "contact":contact,
+                    "inspector":inspector,
+                    "comment":comment,
+                    "roomLabelCode":roomLabelCode
+                },
+                traditional: false,
+                datatype:"json",
+                success:function (data) {
+                    if (data===true){
+                        alert("提交成功！");
+                        window.location.href="/returntoindex";
+                    }else{
+                        alert("入库失败！请重新提交");
+                        return false;
+                    }
+                },
+                error:function (data) {
+
+                }
+            })
+        }
+
+    });
+</script>
+</body>
+</html>

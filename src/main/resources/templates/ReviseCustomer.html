@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>修改客户</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=VovYGooPZpSU7yqTG1GeukhP1UVibGK2"></script>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">修改客户</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form id="main-form" action="/reviseincustomer">
+                            <p>
+                                &emsp;&emsp;<label>客户名字：</label><input type="text" name="customerName" th:if="${customers}" th:value="${customers.getCustomerName()}">
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['customerName']}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>联系方式：</label><input type="text" name="customerContact" th:if="${customers}" th:value="${customers.getCustomerContact()}">
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['customerContact']}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>地&emsp;&emsp;址：</label><input type="text" id="address" name="address" th:if="${customers}" th:value="${customers.getAddress()}">&emsp;
+                                <input type="button" value="点击搜索" onClick="sear(document.getElementById('address').value);">
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['address']}"></label>
+                            </p>
+                            <div id="mapContainer" style="width: 300px;height: 230px"></div>
+                            <p>
+                                <input type="hidden" name="id" th:value="${customers.getId()}">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" value="点击修改">&emsp;&emsp;&emsp;<input type="reset" value="点击重置">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //设置中心点坐标
+    var point = new BMap.Point(116.331398,39.897445);
+    //初始化地图
+    /**
+     *地图类型：
+     *普通地图：BMAP_NORMAL_MAP
+     *卫星地图：BMAP_HYBRID_MAP
+     */
+    var map = new BMap.Map("mapContainer",{mapType:BMAP_NORMAL_MAP,minZoom:1,maxZoom:18}); //设置地图类型及最小最大级别
+    //设置地图级别（1-18）
+    map.centerAndZoom(point,12);
+    //开启滚轮缩放地图
+    map.enableScrollWheelZoom();
+    //进行浏览器定位
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        // 定位成功事件
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            //alert('您的位置：'+r.point.lng+','+r.point.lat);
+            var point = new BMap.Point(r.point.lng, +r.point.lat);
+        }
+    },{enableHighAccuracy: true});
+
+    //addEventListener--添加事件监听函数
+    //click--点击事件获取经纬度
+
+    var geoc = new BMap.Geocoder();
+    var lng=0,lat=0;
+    var addComp;
+    map.addEventListener("click",function(e){
+        map.clearOverlays();
+        var pt = new BMap.Point(e.point.lng, e.point.lat);
+        var marker = new BMap.Marker(pt);
+        // 将标注添加到地图中
+        map.addOverlay(marker);
+        lng=e.point.lng;
+        lat=e.point.lat;
+        // prompt("鼠标单击地方的经纬度为：",e.point.lng + "," + e.point.lat);
+        // $("input[name='where']").val(address);
+        geoc.getLocation(pt, function(rs){
+            addComp = rs.addressComponents;
+            $("input[name='address']").val(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber);
+        });
+    });
+    function sear(result){//地图搜索
+        var local = new BMap.LocalSearch(map, {
+            renderOptions:{map: map}
+        });
+        var search = local.search(result);
+    }
+</script>
+</body>
+</html>

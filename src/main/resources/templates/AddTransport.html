@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>新增运输工具</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=VovYGooPZpSU7yqTG1GeukhP1UVibGK2"></script>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">新增运输工具</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form id="main-form" action="/inserttransport">
+                            <p>
+                                &emsp;&emsp;<label>运输类型：</label><input type="text" name="truckType" th:if="${currentdata}" th:value="${currentdata.getTruckType()}">
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['truckType']}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>最大承重：</label><input type="text" name="maxBearing" th:if="${currentdata}" th:value="${currentdata.getMaxBearing()}">
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['maxBearing']}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>百里费用：</label><input type="text" id="address" name="rentalCost" th:if="${currentdata}" th:value="${currentdata.getRentalCost()}">&emsp;元
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['rentalCost']}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<input class="btn btn-success" type="submit" value="点击新增">&emsp;&emsp;&emsp;<input class="btn btn-primary" type="reset" value="点击重置">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

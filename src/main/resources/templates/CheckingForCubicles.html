@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>审核入库申请表</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">货物基本信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>货物名称</th>
+                                <th>货物重量</th>
+                                <th>货物体积(m³)</th>
+                                <th>申请时间</th>
+                                <th>申请人员</th>
+                                <th>配送方式</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><label th:text="${tempSaveItems.getItemName()}"></label></td>
+                                <td><input type="text" name="itemWeight" id="itemWeight" placeholder="请输入重量"></td>
+                                <td><label th:text="${tempSaveItems.getVolume()}"></label></td>
+                                <td><label th:text="${tempSaveItems.getDates()}"></label></td>
+                                <td><label th:text="${tempSaveItems.getOperator()}"></label></td>
+                                <td><label th:text="${tempSaveItems.getSendMode()}"></label></td>
+                                <input type="hidden" id="volume" th:value="${tempSaveItems.getVolume()}">
+                                <input type="hidden" id="tempId" th:value="${tempSaveItems.getId()}">
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">库房基本信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <caption>库房信息</caption>
+                            <thead>
+                            <tr>
+                                <th>库房名称</th>
+                                <th>库房容量(m³)</th>
+                                <th>已用容量(m³)</th>
+                                <th>未用容量(m³)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><label th:text="${room.getRoomName()}"></label></td>
+                                <td><label th:text="${room.getRoomVolume()}"></label></td>
+                                <td><label th:text="${room.getUsedCapacity()}"></label></td>
+                                <td><label th:text="${room.getUnusedCapacity()}"></label></td>
+                                <input type="hidden" id="length" th:value="${room.getLength()}">
+                                <input type="hidden" id="width" th:value="${room.getWidth()}">
+                                <input type="hidden" id="height" th:value="${room.getHeight()}">
+                                <input type="hidden" id="roomCode" th:value="${room.getRoomCode()}">
+                                <input type="hidden" id="roomId" th:value="${room.getRoomCode()}">
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">选择库房存放位置</h3>
+                    </div>
+                    <div class="panel-body">
+                        <label>推荐隔间数目：</label><label><input type="text" id="num" readonly></label>
+                        <table id="room">
+
+                        </table>
+                        <button class="btn btn-success" id="accesschecking">通过审核</button>
+                        <button class="btn btn-primary" id="returnchecking">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+   $(document).ready(function () {
+       var roomCode = $("#roomCode").val();
+
+       var volume = parseInt($("#volume").val());
+       var height = parseInt($("#height").val());
+       console.log(volume+"fasdf"+height);
+       var num = Math.ceil(volume/height);
+       var n = num;
+       $("#num").val(num);
+
+       $.ajax( {
+           type:"POST",
+           url:"/cubiclesdata",
+           data: {
+               "roomCode": roomCode
+           },
+           traditional: false,
+           datatype:"json",
+           success:function (data) {
+               var length = parseInt($("#length").val());
+               var width = parseInt($("#width").val());
+               var len=0;
+               var flag=0;
+               var strCode = "";
+               for (;len<length;len++){
+                   var wid = 0;
+                   strCode+="<tr>";
+                   for (;wid<width;wid++){
+                       strCode+="<td><input type='checkbox' name='cubicles' id='"+data[flag]['code']+"' value='"+data[flag]['code']+"' ";
+                       //隔间已经锁定
+                       if (data[flag]['status']==='3'){
+                           strCode+=" disabled><label>"+data[flag]['code']+"</label></td>";
+                       }else if(data[flag]['status']==='4'){//隔间已经占用
+                           strCode+="disabled='disabled' checked><label>"+data[flag]['code']+"</label></td>";
+                       }else if(data[flag]['status']==='1'&& n-->0){
+                           strCode+="checked><label>"+data[flag]['code']+"</label></td>";
+                       }else{
+                           strCode+="><label>"+data[flag]['code']+"</label></td>";
+                       }
+                       flag++;
+                   }
+                   strCode+="</tr>";
+               }
+               $("#room").append(strCode);
+           },
+           error:function (data) {
+
+           }
+       });
+       $("#accesschecking").on("click",function () {
+           var count = 0;
+           var itemWeight = $("#itemWeight").val();
+           var volume = $("#volume").val();
+           var tempId = $("#tempId").val();
+           var roomId = $("#roomId").val();
+           var nums = [];
+           $.each($("input[name='cubicles']:checked"), function () {
+               if($(this).attr("disabled")!=="disabled"){
+                   count = count + 1;
+                   nums.push($(this).val());
+                   console.log(count);
+               }
+           });
+           if (count!=num){
+               alert("请选择合适的隔间数目！");
+               return false;
+           }else if(itemWeight == null||itemWeight===""||isNaN(itemWeight)){
+                alert("请填写货物重量！");
+                return false;
+           }else{
+               console.log(nums);
+                $.ajax({
+                    type:"POST",
+                    url:"/checkingsuccess",
+                    data:{
+                        "nums":nums,
+                        "itemWeight":itemWeight,
+                        "tempId":tempId,
+                        "roomId":roomId
+                    },
+                    traditional: true,
+                    datatype:"json",
+                    success:function (data) {
+                        if (data===true){
+                            alert("审核通过！");
+                            window.location.href="/returntoindex";
+                        }else{
+                            alert("入库失败！请重新提交");
+                            return false;
+                        }
+                    },
+                    error:function (data) {
+
+                    }
+                });
+           }
+       });
+       $("#returnchecking").on("click",function () {
+           window.location.href="/returntoquerycheckitem";
+       })
+
+   })
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>出库详情页</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=VovYGooPZpSU7yqTG1GeukhP1UVibGK2"></script>
+<style type="text/css">
+    body, html,#myContainer {width: 100%;height: 100%;overflow: auto;margin:0;font-family:"微软雅黑";}
+    ul li {
+        list-style: none;
+    }
+    .btn-wrap {
+        z-index: 999;
+        position: fixed;
+        bottom: 3.5rem;
+        margin-left: 3rem;
+        padding: 1rem 1rem;
+        border-radius: .25rem;
+        background-color: #fff;
+        box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+    }
+    .btn {
+        width: 100px;
+        height: 30px;
+        float: left;
+        background-color: #fff;
+        color: rgba(27, 142, 236, 1);
+        font-size: 14px;
+        border:1px solid rgba(27, 142, 236, 1);
+        border-radius: 5px;
+        margin: 0 5px;
+        text-align: center;
+        line-height: 30px;
+    }
+    .btn:hover {
+        background-color: rgba(27, 142, 236, 0.8);
+        color: #fff;
+    }
+</style>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">出库详情页</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div style="width: 750px;height: 500px;" id="myContainer" class="col-md-6"></div>
+                        <div style="float: right">
+                            <table class="table table-responsive table-condensed">
+                                <tr>
+                                    <th colspan="2">详细信息</th>
+                                </tr>
+                                <tr>
+                                    <th>货物名称</th><td th:text="${exportList.getItemName()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>货物重量</th><td th:text="${exportList.getItemWeight()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>货物起点</th><td>河北省石家庄市</td>
+                                </tr>
+                                <tr>
+                                    <th>货物终点</th><td th:text="${exportList.getReceiveAddress()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>出发时间</th><td th:text="${exportList.getExportDate()}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    var end_lng = [[${exportList.getLng()}]];
+    var end_lat = [[${exportList.getLat()}]];
+
+
+    var map = new BMap.Map("myContainer",{mapType:BMAP_NORMAL_MAP,minZoom:1,maxZoom:18});
+    map.centerAndZoom(new BMap.Point(114.509052,38.082581), 14);
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+
+    var driving = new BMap.DrivingRoute(map, {
+        renderOptions: {
+            map: map,
+            autoViewport: true
+        }
+    });
+    var start = new BMap.Point(114.509052,38.082581);
+    console.log(end_lat);
+    console.log(end_lng);
+    var end = new BMap.Point(end_lng,end_lat);
+    driving.search(start, end);
+</script>
+
+</body>
+</html>

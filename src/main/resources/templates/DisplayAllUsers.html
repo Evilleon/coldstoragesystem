@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>用户列表</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">用户列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table-responsive">
+                            <tr>
+                                <th>&emsp;序&emsp;&emsp;号&emsp;</th>
+                                <th>&emsp;用户名&emsp;</th>
+                                <th>&emsp;状&emsp;&emsp;态&emsp;</th>
+                                <th>&emsp;操&emsp;&emsp;作&emsp;</th>
+                            </tr>
+                            <tr th:each="item,c:${users}">
+                                <th th:text="'&emsp;'+${c.count}+'&emsp;'"></th>
+                                <th th:text="'&emsp;'+${item.getUserName()}+'&emsp;'"></th>
+                                <th th:text="'&emsp;'+${item.getStatusText()}+'&emsp;'"></th>
+                                <th><a id="locked" th:href="@{/locked(id=${item.getId()})}"><label th:if="${item.getStatus() eq '1'}" th:text="锁定"></label></a>
+                                    <a id="unlocked" th:href="@{/unlocked(id=${item.getId()})}"><label th:if="${item.getStatus() eq '2'}" th:text="解锁"></label></a>
+                                    <a id="del" th:href="@{/delete(id=${item.getId()})}"><label th:if="${item.getStatus() eq '2'}" th:text="删除"></label></a>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#del").on("click",function () {
+        var r = confirm("确定删除吗");
+        return r === true;
+    });
+</script>
+</body>
+</html>

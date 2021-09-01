@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/linearicons/style.css">
+    <link rel="stylesheet" href="/vendor/chartist/css/chartist-custom.css">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+    <link rel="stylesheet" href="/css/demo.css">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+<!--    <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">-->
+<!--    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon.png">-->
+    <!--SCRIPTS-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/jquery/jquery.base64.js"></script>
+<!--    <script src="/vendor/jquery/tableexport.js"></script>-->
+<!--    <script src="/vendor/jquery/FileSaver.js"></script>-->
+<!--    <script src="/vendor/jquery/xlsx.core.min.js"></script>-->
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="/vendor/chartist/js/chartist.min.js"></script>
+    <script src="/scripts/klorofil-common.js"></script>
+    <!--MAP SCRIPTS-->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@3.2.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@3.2.0/map/js/china.js"></script>
+    <!--FILESAVER SCRIPTS-->
+    <script src="https://cdn.jsdelivr.net/npm/FileSaver@0.10.0/FileSaver.js"></script>
+    <!--XLSX SCRIPTS-->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.9/dist/xlsx.core.min.js"></script>
+    <!--TABLE2EXCEL SCRIPT-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-table2excel@1.1.1/dist/jquery.table2excel.js"></script>
+    <title>主页</title>
+</head>
+<body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=VovYGooPZpSU7yqTG1GeukhP1UVibGK2"></script>
+
+<!--头部-->
+    <div id="wrapper">
+    <!-- NAVBAR -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="brand">
+                <a href="/returntoindex"><img src="/img/logo.png" alt="waiting..." style="width: 139px;height: 25px"></a>
+            </div>
+            <div class="container-fluid">
+                <div class="navbar-btn">
+                    <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+                </div>
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span th:text="${username}">请登录</span><!-- <i class="icon-submenu lnr lnr-chevron-down"></i>--></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/changepassword"><i class="lnr lnr-user"></i> <span>修改密码</span></a></li>
+                                <li><a href="index.html"><i class="lnr lnr-exit"></i> <span>退出登录</span></a></li>
+                            </ul>
+                            <!--<ul class="dropdown-menu">
+                                <li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
+                                <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
+                                <li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
+                                <li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+                            l></u-->
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--头部结束-->
+        <!--左侧栏-->
+        <!-- LEFT SIDEBAR -->
+        <div id="sidebar-nav" class="sidebar">
+            <div class="sidebar-scroll">
+                <nav>
+                    <ul class="nav">
+                        <li>
+                            <a href="#subPage" data-toggle="collapse" class="collapsed"><i class="lnr lnr-home"></i> <span>冷藏项目管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="subPage" class="collapse">
+                                <ul class="nav">
+<!--                                    <li><a href="/addcoldstorageitem" class="">冷藏项目自动入库</a></li>-->
+                                    <li><a href="/manualaddcolditem" class="">冷藏项目手动入库</a></li>
+                                    <li><a href="/excoldstorageitem" class="">冷藏项目出库</a></li>
+                                    <li><a href="/waitcheckitem" class="">提交审批项目</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#checking" data-toggle="collapse" class="collapsed"><i class="lnr lnr-pencil"></i> <span>审批管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="checking" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="/querycheckitem" class="">等待审批入库项目</a></li>
+                                    <li><a href="/querycheckexitem" class="">等待审批出库项目</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#roomMan" data-toggle="collapse" class="collapsed"><i class="lnr lnr-code"></i> <span>冷库项目管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="roomMan" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="/addroominformation" class="">新增冷库信息</a></li>
+                                    <li><a href="/roominformationdisplay" class="">冷库信息展示</a></li>
+                                    <li><a href="/addcustomlabel" class="">新增冷库标签</a></li>
+                                    <li><a href="/displaylabel" class="">展示冷库标签</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#reportForm" data-toggle="collapse" class="collapsed"><i class="lnr lnr-chart-bars"></i> <span>报表管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="reportForm" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="/displaywarehousing" class="">入库报表</a></li>
+                                    <li><a href="/displaydelivery" class="">出库报表</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#customer" data-toggle="collapse" class="collapsed"><i class="lnr lnr-user"></i> <span>人员管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="customer" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="/toinsertuser" class="">新增用户</a></li>
+                                    <li><a href="/selectalluser" class="">管理用户</a></li>
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#address" data-toggle="collapse" class="collapsed"><i class="lnr lnr-bus"></i> <span>收货地址管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="address" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="/toinsertcustomer" class="">新增收货地址</a></li>
+                                    <li><a href="/displaycustomer" class="">管理收货地址</a></li>
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#transport" data-toggle="collapse" class="collapsed"><i class="lnr lnr-bus"></i> <span>运输工具管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="transport" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="/toinserttransport" class="">新增运输工具</a></li>
+                                    <li><a href="/todisplaytransport" class="">展示运输工具</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a href="/displayexportlists" class=""><i class="lnr lnr-cog"></i> <span>出库详情单</span></a></li>
+<!--                        <li><a href="#" class=""><i class="lnr lnr-cog"></i> <span>Panels</span></a></li>-->
+<!--                        <li><a href="#" class=""><i class="lnr lnr-alarm"></i> <span>Notifications</span></a></li>-->
+<!--                        <li>-->
+<!--                            <a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-file-empty"></i> <span>Pages</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>-->
+<!--                            <div id="subPages" class="collapse">-->
+<!--                                <ul class="nav">-->
+<!--                                    <li><a href="#" class="">Profile</a></li>-->
+<!--                                    <li><a href="#" class="">Login</a></li>-->
+<!--                                    <li><a href="#" class="">Lockscreen</a></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </li>-->
+<!--                        <li><a href="#" class=""><i class="lnr lnr-dice"></i> <span>Tables</span></a></li>-->
+<!--                        <li><a href="#" class=""><i class="lnr lnr-text-format"></i> <span>Typography</span></a></li>-->
+<!--                        <li><a href="#" class=""><i class="lnr lnr-linearicons"></i> <span>Icons</span></a></li>-->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!--主体-->
+        <!--MAIN-->
+        <div id="main" class="main">
+            <div class="main-content">
+                <div class="container-fluid">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">冷库分布图</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="mapContainer" style="width: 1100px;height: 500px">
+<!--            <div class="main-content">-->
+<!--                <div class="container-fluid">-->
+<!--                    <a href="/addcoldstorageitem">新增冷藏项目</a>-->
+<!--                    <hr>-->
+<!--                    <a href="/addroominformation">新增冷库信息</a>-->
+<!--                    <hr>-->
+<!--                    <a href="/roominformationdisplay">展示冷库信息</a>-->
+<!--                    <hr>-->
+<!--                    <a href="/addcustomlabel">自定义冷库标签</a>-->
+<!--                </div>-->
+<!--            </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<hr>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var map = new BMap.Map('mapContainer');
+        map.centerAndZoom(new BMap.Point(114.521532, 38.048312), 11);
+        map.enableScrollWheelZoom(true);
+        $.ajax({
+            type: "POST",
+            url: "/roommsg",
+            traditional: false,
+            datatype: "json",
+            success:function (data) {
+                // console.log(data[7]["lng"]);
+                $.each(data,function(index,element){
+                    if (element.lng != null){
+                        var marker1 = new BMap.Marker(new BMap.Point(element.lng, element.lat));
+                        map.addOverlay(marker1);
+                        var opts = {
+                            width : 200,     // 信息窗口宽度
+                            height: 100,     // 信息窗口高度
+                            title : element.roomName, // 信息窗口标题
+                            // message:"这里是故宫"
+                        };
+                        var infoWindow = new BMap.InfoWindow("面积："+element.roomVolume+"m³<br/>仓储类型："+element.roomLabelName+"<br/>剩余容量："+element.unusedCapacity+"m³", opts);  // 创建信息窗口对象
+                        marker1.addEventListener("click", function(){
+                            map.openInfoWindow(infoWindow, new BMap.Point(element.lng, element.lat)); //开启信息窗口
+                        });
+                    }
+                })
+            },
+            error:function (data) {
+                alert("错误访问，请刷新重试！");
+            }
+        });
+        // 创建点标记
+
+        // var marker2 = new BMap.Marker(new BMap.Point(116.404, 39.915));
+        // var marker3 = new BMap.Marker(new BMap.Point(116.395, 39.935));
+        // var marker4 = new BMap.Marker(new BMap.Point(116.415, 39.931));
+        // 在地图上添加点标记
+        // map.addOverlay(marker2);
+        // map.addOverlay(marker3);
+        // map.addOverlay(marker4);
+    })
+    // options = {
+    //     title:{
+    //         show: true,
+    //         text:"冷库分布位置",
+    //         textStyle:{
+    //             color: "#000000"
+    //         },
+    //         x:'right',
+    //         y:'bottom'
+    //     },
+    //     geo:{
+    //         map: 'china',
+    //         regions: [{
+    //            name: '河北',
+    //            itemStyle: {
+    //                areaColor: 'red',
+    //                color: 'red'
+    //            },
+    //            selected:true
+    //         }]
+    //     }
+    // };
+    // var myChart = echarts.init(document.getElementById('main'));
+    // myChart.setOption(options);
+
+
+</script>
+</body>
+</html>

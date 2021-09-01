@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>入库报表</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">入库报表</h3>
+                        <button style="float: right" id="btnExport">导出</button>
+                    </div>
+                    <div class="panel-body">
+                        <div id="search">
+                            <div id="search-wrap">
+                                <select id="searchType" name="searchType" class="search-choise">
+                                    <option value="itemName">货物名称</option>
+                                    <option value="roomCode">库房编号</option>
+                                </select>
+                                <input type="text" placeholder="输入搜索内容" id="searchWord" name="searchWord" maxlength="10">
+                                <button class="btn btn-primary" name="searchExcute" id="searchExcute" type="submit">搜索</button>
+                                <button class="btn btn-primary" name="allInformation" id="allInformation" type="button">查看全部</button>
+                            </div>
+                        </div>
+                        <br>
+                        <table id="warehousingTable" class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+
+                                    <th>物品名称</th>
+                                    <th>入库重量</th>
+                                    <th>库房编号</th>
+
+                                    <th>申请时间</th>
+                                    <th>入库人员</th>
+                                    <th>审查人员</th>
+
+                                    <th>入库时间</th>
+                                    <th>隔间编号</th>
+                                    <th>入库备注</th>
+
+                                    <!--                                <th>操作</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item,c:${tempSaveItems}">
+                                    <td th:text="${c.count}"></td>
+
+                                    <td th:text="${item.getItemName()}"></td>
+                                    <td th:text="${item.getItemWeight()}"></td>
+                                    <td th:text="${item.getRoomCode()}"></td>
+
+                                    <td th:text="${item.getDates()}"></td>
+                                    <td th:text="${item.getOperator()}"></td>
+                                    <td th:text="${item.getInspector()}"></td>
+
+                                    <td th:text="${item.getExDate()}"></td>
+                                    <td style="width: 100px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" th:text="${item.getRoomPoint()}"></td>
+                                    <td th:text="${item.getComment()}"></td>
+
+                                    <!--                                <th><a id="delete" th:href="@{/deleteexportlist(id=${item.getId()})}"> <label th:if="${item.getStatus() eq '1' || item.getStatus() eq '2'} " th:text="撤销"></label></a>&emsp;<a th:href="@{/todetail(id=${item.getId()})}">-->
+                                    <!--                                    <label th:if="${item.getStatus() eq '3'}" id="details" th:text="查看运送详情"></label></a></th>-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#searchExcute").click(function () {
+            if ($("#searchWord").val().trim() === "" || $("#searchWord").val().trim() === null) {
+                $("#searchWord").val("");
+                alert("搜索内容不能为空！");
+            } else {
+                var searchType = $("#searchType").find("option:selected").val();
+                var searchWord = $("input[name='searchWord']").val();
+                //alert(searchWord);
+                //$(location).attr("href","/searchdelivery?searchType="+searchType+"&searchWord="+searchWord);
+                //location.href = "/searchwarehousing?searchType="+searchType+"&searchWord="+searchWord;
+                $.ajax({
+                    type: "POST",
+                    url: "/searchwarehousing",
+                    data: {
+                        "searchType": searchType,
+                        "searchWord": searchWord
+                    },
+                    traditional: false,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#warehousingTable").empty();
+                        var codeStr="<thead>\n" +
+                            "                                <tr>\n" +
+                            "                                    <th>序号</th>\n" +
+                            "\n" +
+                            "                                    <th>物品名称</th>\n" +
+                            "                                    <th>入库重量</th>\n" +
+                            "                                    <th>库房编号</th>\n" +
+                            "\n" +
+                            "                                    <th>申请时间</th>\n" +
+                            "                                    <th>入库人员</th>\n" +
+                            "                                    <th>审查人员</th>\n" +
+                            "\n" +
+                            "                                    <th>入库时间</th>\n" +
+                            "                                    <th>隔间编号</th>\n" +
+                            "                                    <th>入库备注</th>\n" +
+                            "\n" +
+                            "                                    <!--                                <th>操作</th>-->\n" +
+                            "                                </tr>\n" +
+                            "                            </thead>\n" +
+                            "                            <tbody>" +
+                            "<tr>";
+                        $.each(data,function (index, element) {
+                            codeStr += "<td>"+index+"</td>" +
+                                "<td>"+element.itemName+"</td>" +
+                                "<td>"+element.itemWeight+"</td>" +
+                                "\<td>"+element.roomCode+"</td>" +
+                                "<td>"+element.dates+"</td>" +
+                                "<td>"+element.operator+"</td>" +
+                                "<td>"+element.inspector+"</td>" +
+                                "<td>"+element.exDate+"</td>" +
+                                "<td style='width: 100px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;'>"+element.roomPoint+"</td>" +
+                                "<td>"+element.comment+"</td>" +
+                                "</tr>" +
+                                "</tbody>";
+                        });
+                        $("#warehousingTable").append(codeStr);
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+        });
+        $("#allInformation").click(function () {
+            location.href = "/displaywarehousing";
+        });
+        $("#btnExport").click(function(){
+            var date = new Date();
+            $('#warehousingTable').table2excel({
+                type:'excel',
+                escape:'false',
+                filename: 'warehousingtable'+date.getTime(),
+            });
+        });
+    });
+</script>
+</body>
+</html>

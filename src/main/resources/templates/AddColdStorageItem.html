@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>新增冷藏项目</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">新增冷藏项目</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="/itemssave">
+                            <p>
+                                &emsp;&emsp;<label>名&emsp;&emsp;称:</label><input type="text" name="itemName" th:if="${currentdata}" th:value="${currentdata.getItemName()}" placeholder="小于16位"/>
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['itemName']}"></label>
+
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>重&emsp;&emsp;量:</label><input type="text" name="itemWeight" th:if="${currentdata}" th:value="${currentdata.getItemWeight()}" placeholder="请输入数字"/><label>&emsp;吨</label>
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['itemWeight']}"></label>
+                                <label style="color: red" th:if="${msg}" th:text="${msg}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>体&emsp;&emsp;积:</label><input type="text" name="itemVolume" th:if="${currentdata}" th:value="${currentdata.getItemVolume()}" placeholder="请输入数字"/><label>&emsp;m³</label>
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['itemWeight']}"></label>
+                                <label style="color: red" th:if="${msg}" th:text="${msg}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>标&emsp;&emsp;签:</label>
+                                <label>
+                                    <select name="roomLabel.roomLabelCode">
+                                        <option th:each="item:${labelinformation}"
+                                                th:value="${item.getRoomLabelCode()}"
+                                                th:text="${item.getRoomLabelName()}"></option>
+                                    </select>
+                                </label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;&emsp;<input class="btn btn-success" type="submit" id="sub" value="自动存储"/>&emsp;&emsp;<input class="btn btn-primary" type="reset" value="重置" th:value="重置">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

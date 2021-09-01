@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>出库报表</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">出库报表</h3>
+                        <button style="float: right" id="btnExport">导出</button>
+                    </div>
+                    <div class="panel-body">
+                        <div id="search">
+                            <div id="search-wrap">
+                                <select id="searchType" name="searchType" class="search-choise">
+                                    <option value="itemName">货物名称</option>
+                                    <option value="roomCode">库房编号</option>
+                                </select>
+                                <input type="text" placeholder="输入搜索内容" id="searchWord" name="searchWord" maxlength="10">
+                                <button class="btn btn-primary" name="searchExcute" id="searchExcute" type="submit">搜索</button>
+                                <button class="btn btn-primary" name="allInformation" id="allInformation" type="button">查看全部</button>
+                            </div>
+                        </div>
+                        <br>
+                        <table id="deliveryTable" class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+
+                                    <th>物品名称</th>
+                                    <th>出库重量(KG)</th>
+                                    <th>出库体积(m³)</th>
+
+                                    <th>入库时间</th>
+                                    <th>出库时间</th>
+                                    <th>配送花费(元)</th>
+
+                                    <th>存储花费(元)</th>
+
+                                    <th>总费用(元)</th>
+                                    <!--                                <th>操作</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item,c:${exportLists}">
+                                    <td th:text="${c.count}"></td>
+
+                                    <td th:text="${item.getItemName()}"></td>
+                                    <th th:text="${item.getItemWeight()}"></th>
+                                    <td th:text="${item.getItemVolume()}"></td>
+
+                                    <td th:text="${item.getWarehousingDate()}"></td>
+                                    <td th:text="${item.getExportDate()}"></td>
+                                    <td th:text="${item.getDeliverCost()}"></td>
+
+                                    <td th:text="${item.getAllCost()}"></td>
+                                    <td th:text="${item.getAmountCost()}"></td>
+
+                                    <!--                                <th><a id="delete" th:href="@{/deleteexportlist(id=${item.getId()})}"> <label th:if="${item.getStatus() eq '1' || item.getStatus() eq '2'} " th:text="撤销"></label></a>&emsp;<a th:href="@{/todetail(id=${item.getId()})}">-->
+                                    <!--                                    <label th:if="${item.getStatus() eq '3'}" id="details" th:text="查看运送详情"></label></a></th>-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#searchExcute").click(function () {
+            if ($("#searchWord").val().trim()==="" || $("#searchWord").val().trim()===null){
+                $("#searchWord").val("");
+                alert("搜索内容不能为空！");
+            }else{
+                var searchType = $("#searchType").find("option:selected").val();
+                var searchWord = $("input[name='searchWord']").val();
+                //alert(searchWord);
+                //$(location).attr("href","/searchdelivery?searchType="+searchType+"&searchWord="+searchWord);
+                //location.href = "/searchdelivery?searchType="+searchType+"&searchWord="+searchWord;
+                $.ajax({
+                    type: "POST",
+                    url: "/searchdelivery",
+                    data: {
+                        "searchType": searchType,
+                        "searchWord": searchWord
+                    },
+                    traditional: false,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#deliveryTable").empty();
+                        var codeStr="<thead>\n" +
+                            "                                <tr>\n" +
+                            "                                    <th>序号</th>\n" +
+                            "\n" +
+                            "                                    <th>物品名称</th>\n" +
+                            "                                     <th>出库重量(KG)</th>\n" +
+                            "                                    <th>出库体积(m³)</th>\n" +
+                            "\n" +
+                            "                                    <th>入库时间</th>\n" +
+                            "                                     <th>出库时间</th>\n" +
+                            "                                    <th>配送花费(元)</th>\n" +
+                            "\n" +
+                            "                                    <th>存储花费(元)</th>\n" +
+                            "                                    <th>总费用(元)</th>\n" +
+                            "\n" +
+                            "                                    <!--                                <th>操作</th>-->\n" +
+                            "                                </tr>\n" +
+                            "                            </thead>\n" +
+                            "                            <tbody>" +
+                            "<tr>";
+                        $.each(data,function (index, element) {
+                            codeStr += "<td>"+index+"</td>" +
+                                "<td>"+element.itemName+"</td>" +
+                                "<td>"+element.itemWeight+"</td>" +
+                                "\<td>"+element.itemVolume+"</td>" +
+                                "<td>"+element.warehousingDate+"</td>" +
+                                "<td>"+element.exportDate+"</td>" +
+                                "<td>"+element.deliverCost+"</td>" +
+                                "<td>"+element.allCost+"</td>" +
+                                "<td>"+element.amountCost+"</td>" +
+                                "</tr>" +
+                                "</tbody>";
+                        });
+                        $("#deliveryTable").append(codeStr);
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+        });
+        $("#allInformation").click(function () {
+            location.href = "/displaydelivery";
+        });
+        $("#btnExport").click(function(){
+            var date = new Date();
+            $('#deliveryTable').table2excel({
+                type:'excel',
+                escape:'false',
+                filename: 'deliverytable'+date.getTime(),
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

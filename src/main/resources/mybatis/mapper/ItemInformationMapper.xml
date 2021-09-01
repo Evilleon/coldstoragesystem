@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryq.coldstoragesystem.mapper.ItemInformationMapper">
+    <insert id="insertByRoomCode">
+        insert into ${roomCode}(item_name,item_weight,item_volume,inspect_registration_time_stamp,registration_time_stamp,identifier,operator,inspector,room_point,temp_id) values(#{item.itemName},#{item.itemWeight},#{item.itemVolume},#{item.inspectRegistrationTimeStamp},#{item.registrationTimeStamp},#{item.identifier},#{item.operator},#{item.inspector},#{item.roomPoint},#{item.tempId})
+    </insert>
+    <insert id="addCheckitem">
+        insert into checking_items(item_name,item_weight,registration_time_stamp,operator,inspector,status,room_code,comment,identifier,room_label_code,length,width,height,volume,send_mode,sender,contact,send_cost,room_point,lng,lat) values(#{itemName},#{itemWeight},#{registrationTimeStamp},#{operator},#{inspector},#{status},#{roomCode},#{comment},#{identifier},#{roomLabelCode},#{length},#{width},#{height},#{volume},#{sendMode},#{sender},#{contact},#{sendCost},#{roomPoint},#{lng},#{lat})
+    </insert>
+    <update id="updateById">
+        update ${arg0} set item_weight=#{arg2} where id=#{arg1}
+    </update>
+    <delete id="deleteByIdCustom">
+        delete from ${arg0} where id=#{arg1}
+    </delete>
+</mapper>

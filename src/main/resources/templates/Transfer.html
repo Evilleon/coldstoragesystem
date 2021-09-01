@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>转仓</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">转仓</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="/itemtransfer" method="get">
+                            <p>
+                                &emsp;&emsp;<label>名&emsp;&emsp;称:</label><input type="text" name="itemName" th:if="${currentdata}" th:value="${currentdata.getItemName()}" readonly="readonly"/>
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['itemName']}"></label>
+                                <label style="color: red" th:text="${zeroRoom}"></label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>重&emsp;&emsp;量:</label><input type="text" name="itemWeight" th:if="${currentdata}" th:value="${currentdata.getItemWeight()}" readonly="readonly"/><label>&emsp;吨</label>
+                                <label style="color: red" th:if="${errorMap}" th:text="${errorMap['itemWeight']}"></label>
+
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>原本库房:</label>
+                                <label>
+                                    <input type="text" name="oldRoomCode" th:if="${room}" th:value="${room}" readonly="readonly"/>
+                                </label>
+                            </p>
+                            <p>
+                                &emsp;&emsp;<label>转存库房:</label>
+                                <label>
+                                    <select name="storageRoom.roomCode">
+                                        <option th:each="items:${roomInformation}"
+                                                th:value="${items.getRoomCode()}"
+                                                th:text="${items.getRoomName()}"></option>
+                                    </select>
+                                </label>
+                            </p>
+                            <p>
+                                <input type="hidden" name="inspectRegistrationTimeStamp" th:value="${currentdata.getInspectRegistrationTimeStamp()}">
+                                <input type="hidden" name="registrationTimeStamp" th:value="${currentdata.getRegistrationTimeStamp()}">
+                                <input type="hidden" name="identifier" th:value="${currentdata.getIdentifier()}">
+                                <input type="hidden" name="operator" th:value="${currentdata.getOperator()}">
+                                <input type="hidden" name="inspector" th:value="${currentdata.getInspector()}">
+                                <input type="hidden" name="id" th:value="${id}"/>
+                            </p>
+                            <p>
+                                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" id="sub" value="确定转仓"/>&emsp;&emsp;<input type="reset" value="重置" th:value="重置">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

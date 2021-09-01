@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>用户入库核对</title>
+<head th:replace="header/link :: linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=VovYGooPZpSU7yqTG1GeukhP1UVibGK2"></script>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">货物基本信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <caption>货物信息</caption>
+                            <thead>
+                            <tr>
+                                <th>货物名称</th>
+                                <th>货物重量</th>
+                                <th>货物种类</th>
+                                <th>货物体积(m³)</th>
+                                <th>申请时间</th>
+                                <th>申请人员</th>
+                                <th>配送方式</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><label th:text="${tempSaveItems.getItemName()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getItemWeight()}"></label></td>
+                                    <td><label th:text="${room.getRoomLabelName()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getVolume()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getDates()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getOperator()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getSendMode()}"></label></td>
+                                    <input type="hidden" id="tempLng" th:value="${tempSaveItems.getLng()}">
+                                    <input type="hidden" id="tempLat" th:value="${tempSaveItems.getLat()}">
+                                    <input type="hidden" id="id" th:value="${tempSaveItems.getId()}">
+                                    <input type="hidden" id="status" th:value="${tempSaveItems.getStatus()}">
+
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th>存放库房</th>
+                                    <th>库房种类</th>
+                                    <th>租赁间数(间)</th>
+                                    <th>库房单价(元/间/天)</th>
+                                    <th>租赁单价(元/间/天)</th>
+                                    <th>配送花费(元)</th>
+                                    <th>总费用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><label th:text="${room.getRoomName()}"></label></td>
+                                    <td><label th:text="${room.getRoomLabelName()}"></label></td>
+                                    <td><label style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" th:text="${tempSaveItems.getRoomPoint()}" th:alt="${tempSaveItems.getRoomPoint()}"></label></td>
+                                    <td><label th:text="${room.getRoomDailyCost()}"></label></td>
+                                    <!--<td><label th:text="${tempSaveItems.getSaveCost()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getSendCost()}"></label></td>
+                                    <td><label th:text="${tempSaveItems.getAllCost()}"></label></td>-->
+
+                                    <td><input type="text" id="allCost" th:value="${tempSaveItems.getSaveCost()}" readonly></td>
+                                    <td><input type="text" id="deliverCost" th:value="${tempSaveItems.getSendCost()}" readonly></td>
+                                    <td><input type="text" id="amountCost" th:value="${tempSaveItems.getAllCost()}" readonly></td>
+
+                                    <input type="hidden" id="roomLng" th:value="${room.getLng()}">
+                                    <input type="hidden" id="roomLat" th:value="${room.getLat()}">
+                                    <input type="hidden" id="roomCode" th:value="${room.getRoomCode()}">
+                                    <input type="hidden" id="length" th:value="${room.getLength()}">
+                                    <input type="hidden" id="width" th:value="${room.getWidth()}">
+                                    <input type="hidden" id="cubcicles" th:value="${tempSaveItems.getRoomPoint()}">
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">库房存放位置</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div style="float: left;width: 500px;height: 500px;" id="myContainer">
+
+                        </div>
+                        <div id="rooms">
+                            <table id="room">
+
+                            </table>
+                        </div>
+                        <button class="btn btn-success" id="payment">付款</button>
+                        <button class="btn btn-primary" id="returnchecking">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        var status = $("#status").val();
+        var id = $("#id").val();
+        var startLng = "";
+        var startLat = "";
+        var endLng = "";
+        var endLat = "";
+
+        if (status==="8"){
+            var datas;
+            $("#rooms").hide();
+            //获得exportList信息
+            $.ajax({
+                type:"POST",
+                url: "/searchexportlist",
+                data: {
+                    "id":id
+                },
+                async:false,
+                traditional: false,
+                datatype: "json",
+                success: function (data){
+                    datas=data;
+                    endLng = data[0]['lng'];
+                    endLat = data[0]['lat'];
+                    $("#allCost").val(data[0]['allCost']);
+                    $("#deliverCost").val(data[0]['deliverCost']);
+                    $("#amountCost").val(data[0]['amountCost']);
+                    console.log(data.deliverCost);
+                },
+                error:function () {
+
+                }
+            });
+            startLng = $("#roomLng").val();
+            startLat = $("#roomLat").val();
+        }else{
+            startLng = $("#tempLng").val();
+            startLat = $("#tempLat").val();
+            endLng = $("#roomLng").val();
+            endLat = $("#roomLat").val();
+
+        }
+        var map = new BMap.Map("myContainer",{mapType:BMAP_NORMAL_MAP,minZoom:1,maxZoom:18});
+        map.centerAndZoom(new BMap.Point(114.509052,38.082581), 14);
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        var driving = new BMap.DrivingRoute(map, {
+            renderOptions: {
+                map: map,
+                autoViewport: true
+            }
+        });
+
+        var start = new BMap.Point(startLng,startLat);
+        var end = new BMap.Point(endLng,endLat);
+        driving.search(start, end);
+
+
+        var roomCode = $("#roomCode").val();
+        $.ajax({
+            type: "POST",
+            url: "/cubiclesdata",
+            data: {
+                "roomCode": roomCode
+            },
+            traditional: false,
+            datatype: "json",
+            success: function (data) {
+                var length = parseInt($("#length").val());
+                var width = parseInt($("#width").val());
+                var len = 0;
+                var flag = 0;
+                var strCode = "";
+                for (; len < length; len++) {
+                    var wid = 0;
+                    strCode += "<tr>";
+                    for (; wid < width; wid++) {
+                        strCode += "<td><input type='checkbox' name='cubicles' id='" + data[flag]['code'] + "' value='" + data[flag]['code'] + "' ";
+                        //隔间已经锁定
+                        if (data[flag]['status'] === '3') {
+                            strCode += "checked disabled><label>" + data[flag]['code'] + "</label></td>";
+                        }
+                        else {
+                            strCode += "disabled><label>" + data[flag]['code'] + "</label></td>";
+                        }
+                        flag++;
+                    }
+                    strCode += "</tr>";
+                }
+                $("#room").append(strCode);
+            },
+            error: function (data) {
+
+            }
+        });
+        //付款
+        $("#payment").on("click",function () {
+             var id = parseInt($("#id").val());
+             if (status === '8'){
+                 $.ajax({
+                     type:"POST",
+                     url: "/exdetail",
+                     data: {
+                         "id":id
+                     },
+                     traditional: false,
+                     datatype: "json",
+                     success: function (data){
+                         if (data===true){
+                             alert("付款成功！");
+                             window.location.href="/returntoindex";
+                         }else{
+                             alert("付款失败，请刷新页面重新进入");
+                             return false;
+                         }
+                     },
+                     error:function () {
+
+                     }
+                 });
+             }else {
+                 $.ajax({
+                     type:"POST",
+                     url: "/payment",
+                     data: {
+                         "id":id
+                     },
+                     traditional: false,
+                     datatype: "json",
+                     success: function (data){
+                         if (data===true){
+                             alert("付款成功！");
+                             window.location.href="/returntoindex";
+                         }else{
+                             alert("付款失败，请刷新页面重新进入");
+                             return false;
+                         }
+                     },
+                     error:function () {
+
+                     }
+                 });
+             }
+
+        });
+        $("#returnchecking").on("click",function () {
+            window.location.href="";
+        })
+    })
+</script>
+</body>
+</html>

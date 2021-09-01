@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>入库待审批项目</title>
+<head th:replace="header/link::linkheader">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav th:replace="header/header :: navbar">
+    </nav>
+    <!--SIDEBAR-->
+    <div th:replace="header/side :: sidebar">
+    </div>
+    <!--MAIN-->
+    <div id="main" class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">入库待审批项目</h3>
+                    </div>
+                    <div class="panel-body">
+                <table>
+                    <tr>
+                        <th colspan="9">待审核表</th>
+                    </tr>
+<!--                    <tr>-->
+<!--                        <th colspan="9"><a href="/quickprocess">一键处理</a></th>-->
+<!--                    </tr>-->
+                    <tr style="text-align: center;">
+                        <th>&emsp;序&emsp;&emsp;号&emsp;</th>
+                        <th>&emsp;名&emsp;&emsp;称&emsp;</th>
+                        <th>&emsp;重&emsp;&emsp;量&emsp;</th>
+                        <th>&emsp;时&emsp;&emsp;间&emsp;</th>
+                        <th>&emsp;操作人员&emsp;</th>
+                        <th>&emsp;存储库房&emsp;</th>
+                        <th>&emsp;编&emsp;&emsp;号&emsp;</th>
+                        <th>&emsp;备&emsp;&emsp;注&emsp;</th>
+                        <th>&emsp;审核通过&emsp;</th>
+                    </tr>
+                    <tr style="text-align: center;" th:each="items,c:${inspecting}">
+                        <th><label th:text="'&emsp;'+${c.count}"></label></th>
+                        <th><a id="itemDetails" href=""><label th:text="'&emsp;'+${items.getItemName()}+'&emsp;'"></label></a></th>
+                        <th><label th:text="'&emsp;'+${items.getItemWeight()}+'&emsp;'"></label></th>
+                        <th><label th:text="'&emsp;'+${items.getDates()}+'&emsp;'"></label></th>
+                        <th><label th:text="'&emsp;'+${items.getOperator()}+'&emsp;'"></label></th>
+                        <th><label th:text="'&emsp;'+${items.getRoomName()}+'&emsp;'"></label></th>
+                        <th><label th:text="'&emsp;'+${items.getIdentifier()}+'&emsp;'"></label></th>
+                        <th><label th:text="'&emsp;'+${items.getComment()}"></label></th>
+                        <th>
+                            <input id="uid" name="uid" type="hidden" th:value="${items.getId()}">&emsp;
+                            <a id="postIdToApproved" th:href="@{/approved(id=${items.getId()})}"><img src="/img/right-gray.png" onmouseover="this.src='/img/right-green.png'" onmouseout="this.src='/img/right-gray.png'" alt="审核通过"></a>&emsp;&emsp;
+<!--                            <a id="postIdToUnapproved" th:href="@{/unapproved(id=${items.getId()})}"><img src="/img/wrong-gray.png" onmouseover="this.src='/img/wrong-red.png'" onmouseout="this.src='/img/wrong-gray.png'" alt="审核不通过"></a>&emsp;-->
+                        </th>
+                    </tr>
+                </table>
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--<style type="text/css">-->
+<!--    p{-->
+<!--        background-url("/img/right-gray.png");-->
+<!--    }-->
+<!--    p:hover{-->
+<!--        background-url("/img/right-green.png");-->
+<!--    }-->
+<!--</style>-->
+</html>

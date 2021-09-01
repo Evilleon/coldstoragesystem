@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryq.coldstoragesystem.mapper.TempSaveMapper">
+    <update id="updateByIdCustom" parameterType="com.ryq.coldstoragesystem.bean.TempSaveItems">
+        update checking_items set status=#{status},comment=#{comment},operator=#{operator},inspector=#{inspector} where id=#{id}
+    </update>
+
+    <select id="selectAllByIdCustom" resultType="com.ryq.coldstoragesystem.bean.TempSaveItems">
+        select * from checking_items where id=#{id}
+    </select>
+    <select id="selectAllByStatus" resultType="com.ryq.coldstoragesystem.bean.TempSaveItems">
+        select * from checking_items where status=#{arg1} and operator=#{arg0}
+    </select>
+    <select id="selectByItemNameAndOperator" resultType="com.ryq.coldstoragesystem.bean.TempSaveItems">
+        select * from checking_items where item_name like "%"#{arg0}"%" and operator=#{arg1} and status=#{arg2}
+    </select>
+    <select id="selectByRoomCodeAndOperator" resultType="com.ryq.coldstoragesystem.bean.TempSaveItems">
+        select * from checking_items where room_code like "%"#{arg0}"%" and operator=#{arg1} and status=#{arg2}
+    </select>
+
+    <update id="updateRoomCodeByIdCustom" parameterType="com.ryq.coldstoragesystem.bean.TempSaveItems">
+        update checking_items set room_code=#{roomCode},status=#{status},comment=#{comment},operator=#{operator},inspector=#{inspector} where id=#{id}
+    </update>
+</mapper>
