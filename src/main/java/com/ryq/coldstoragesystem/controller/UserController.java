@@ -61,7 +61,7 @@ public class UserController {
 
         //获得相应角色
         System.out.println(role);
-
+        //拼凑参数
         StringBuilder flag = new StringBuilder();
         String sources = "0123456789";
         Random rand = new Random();
