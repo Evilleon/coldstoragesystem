@@ -5,16 +5,28 @@
     <groupId>com.ryq</groupId>
     <artifactId>coldstoragesystem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>cs-common</module>
+    </modules>
     <name>coldstoragesystem</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Rebase The Coldstoragesystem</description>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+        <alibaba-cloud.version>2.2.5.RELEASE</alibaba-cloud.version>
         <mysql.version>8.0.13</mysql.version>
-        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <hutool.version>5.7.14</hutool.version>
+        <mybatis.version>2.1.4</mybatis.version>
+        <validation.version>2.0.1.Final</validation.version>
+        <shiro.version>1.7.1</shiro.version>
+        <fastjson.version>1.2.47</fastjson.version>
+        <shiro-thymeleaf.version>2.0.0</shiro-thymeleaf.version>
+        <lombok.version>1.18.8</lombok.version>
     </properties>
 
     <dependencies>
@@ -72,14 +84,14 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.4</version>
+            <version>${mybatis.version}</version>
         </dependency>
 
         <!--引入mybatis-plus包-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.2</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
 
         <!--引入校验包-->
@@ -90,33 +102,39 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
+            <version>${validation.version}</version>
         </dependency>
 
         <!--引入shiro包-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.7.1</version>
+            <version>${shiro.version}</version>
         </dependency>
 
         <!--引入json快速解析文件-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
+            <version>${fastjson.version}</version>
         </dependency>
         <!--引入shiro-thymeleaf-->
         <dependency>
             <groupId>com.github.theborakompanioni</groupId>
             <artifactId>thymeleaf-extras-shiro</artifactId>
-            <version>2.0.0</version>
+            <version>${shiro-thymeleaf.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.7.14</version>
+            <version>${hutool.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -128,11 +146,27 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <!--SPRING CLOUD ALIBABA 2.2.5.RELEASE-->
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${alibaba-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <!--SPRING CLOUD HOXTON.SR12-->
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <!--第er个plugin是打包用的-->
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <build>
         <finalName>ColdStorageSystem</finalName>
         <plugins>
