@@ -1,4 +1,4 @@
-package com.ryq.coldstoragesystem.bean;
+package room.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

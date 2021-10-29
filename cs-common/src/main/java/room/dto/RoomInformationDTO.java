@@ -16,22 +16,25 @@ import javax.validation.constraints.*;
 @Data
 public class RoomInformationDTO {
 
-
+    @Valid(pattern = "^(\\d{1,10})$", tipMsg = "id: 不可为空， 长度：10，类型：Long")
+    @ApiModelProperty(name = "id", value = "主键列", required = true, dataType = "Long")
     private Long id;
 
     @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "roomName: 不可为空， 长度：10，类型：String")
-    @ApiModelProperty
+    @ApiModelProperty(name = "roomName", value = "仓库名称", required = true, dataType = "String")
     private String roomName;
 
+    @Valid(pattern = "^[0-9][0-9][1-9]|[0-9][1-9][0-9]|[1-9][0-9][0-9]$", tipMsg = "roomCode: 不可为空， 长度：3，类型：String")
+    @ApiModelProperty(name = "roomCode", value = "仓库编号", required = true, dataType = "String")
     private String roomCode;
 
-    @NotBlank(message="库房可用容量不能为空！")
-    @Min(value = 1,message = "库房容量不能为0且为数字！")
+
+    @Valid(pattern = "^\\d{1,4}$", tipMsg = "roomName: 不可为空， 长度：5，类型：String")
+    @ApiModelProperty(name = "roomVolume", value = "仓库容量", required = true, dataType = "String")
     private String roomVolume;
 
-    @NotBlank(message="额定温度不能为空！")
-    @Min(value = -100,message = "额定温度必须大于零下100摄氏度！")
-    @Max(value = 40,message = "额定温度必须小于零上40摄氏度！")
+    @Valid(pattern = "^-?[1-2][0-5]|-?[1-9]|0$", tipMsg = "roomName: 不可为空， 长度：2，类型：String")
+    @ApiModelProperty(name = "roomTemperature", value = "仓库温度", required = true, dataType = "String")
     private String roomTemperature;
 
     private String roomLabelName;

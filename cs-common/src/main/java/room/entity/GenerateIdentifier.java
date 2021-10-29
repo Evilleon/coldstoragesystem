@@ -1,8 +1,7 @@
-package utils;
+package room.entity;
 
 import cn.hutool.core.util.RandomUtil;
 import org.apache.shiro.SecurityUtils;
-import room.entity.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

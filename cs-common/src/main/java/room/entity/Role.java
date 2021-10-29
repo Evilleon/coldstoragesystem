@@ -1,4 +1,4 @@
-package com.ryq.coldstoragesystem.bean;
+package room.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
