@@ -14,7 +14,6 @@ public class DateAndTimeStamp {
             date = df.format(new Date());
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        ;
         Date time = simpleDateFormat.parse(date);
         long timeStamp = time.getTime();
         return Long.toString(timeStamp);
