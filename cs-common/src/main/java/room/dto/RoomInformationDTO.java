@@ -33,53 +33,58 @@ public class RoomInformationDTO {
     @ApiModelProperty(name = "roomVolume", value = "仓库容量", required = true, dataType = "String")
     private String roomVolume;
 
-    @Valid(pattern = "^-?[1-2][0-5]|-?[1-9]|0$", tipMsg = "roomName: 不可为空， 长度：2，类型：String")
+    @Valid(pattern = "^-?[1-2][0-5]|-?[1-9]|0$", tipMsg = "roomTemperature: 不可为空， 长度：2，类型：String")
     @ApiModelProperty(name = "roomTemperature", value = "仓库温度", required = true, dataType = "String")
     private String roomTemperature;
-
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "roomLabelName: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "roomLabelName", value = "仓库名称", required = true, dataType = "String")
     private String roomLabelName;
+    @Valid(pattern = "^([\\s\\S]{1,30})?$", tipMsg = "roomLabelCode: 不可为空， 长度：30，类型：String")
+    @ApiModelProperty(name = "roomLabelCode", value = "仓库标签编号", required = true, dataType = "String")
     private String roomLabelCode;
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "usedCapacity: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "usedCapacity", value = "已用容量", required = true, dataType = "String")
     private String usedCapacity;
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "unusedCapacity: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "unusedCapacity", value = "未用容量", required = true, dataType = "String")
     private String unusedCapacity;
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "currentTemperature: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "currentTemperature", value = "当前温度", required = true, dataType = "String")
     private String currentTemperature;
-    @NotBlank(message="每日费用不能为空！")
-    @Min(value = 1,message = "日费用不能小于0且为数字！")
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "roomDailyCost: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "roomDailyCost", value = "库房日消费", required = true, dataType = "String")
     private String roomDailyCost;
 
-    private String roomKey;
-    @TableField(exist = false)
-    private String simpleRoomInformation;
-//    private String room_name;
-//    @TableId(value = "room_code")
-//    private String room_code;
-//    private String room_volume;
-//    private String room_temperature;
-//    private String room_label_name;
-//    private String used_capacity;
-//    private String unused_capacity;
-//    private String current_temperature;
-//    private String room_daily_cost;
-//    private String room_key;
-//    @TableField(exist = false)
+    /**
+     * 状态 00正常 01锁定
+     */
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "roomStatus: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "roomStatus", value = "库房状态", required = true, dataType = "String")
+    private String roomStatus;
+
+//    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "roomStatus: 不可为空， 长度：10，类型：String")
+//    @ApiModelProperty(name = "roomStatus", value = "库房状态", required = true, dataType = "String")
 //    private String simpleRoomInformation;
-    @NotNull(message="库房长度不能为空！")
-    @Min(value = 1,message = "库房长度不能为0且为数字！")
-    @Max(value = Integer.MAX_VALUE,message = "库房长度不能超过2147483647米！")
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "length: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "length", value = "长度", required = true, dataType = "String")
     private Integer length;
-    @NotNull(message="库房宽度不能为空！")
-    @Min(value = 1,message = "库房宽度不能为0且为数字！")
-    @Max(value = Integer.MAX_VALUE,message = "库房宽度不能超过2147483647米！")
+
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "width: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "width", value = "宽度", required = true, dataType = "String")
     private Integer width;
-    @NotNull(message="库房高度不能为空！")
-    @Min(value = 1,message = "库房高度不能为0且为数字！")
-    @Max(value = 10,message = "库房高度不能超过10米！")
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "height: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "height", value = "高度", required = true, dataType = "String")
     private Integer height;
 
-    //经度
+    @Valid(pattern = "^([\\s\\S]{1,30})?$", tipMsg = "lng: 不可为空， 长度：30，类型：String")
+    @ApiModelProperty(name = "lng", value = "经度", required = true, dataType = "String")
     private String lng;
-    //纬度
+    @Valid(pattern = "^([\\s\\S]{1,10})?$", tipMsg = "lat: 不可为空， 长度：10，类型：String")
+    @ApiModelProperty(name = "lat", value = "纬度", required = true, dataType = "String")
     private String lat;
     //地址
+    @Valid(pattern = "^([\\s\\S]{1,60})?$", tipMsg = "address: 不可为空， 长度：60，类型：String")
+    @ApiModelProperty(name = "address", value = "地址", required = true, dataType = "String")
     @TableField(exist = false)
     private String address;
 }
