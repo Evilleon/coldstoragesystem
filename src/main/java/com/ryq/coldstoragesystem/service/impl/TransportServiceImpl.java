@@ -5,10 +5,8 @@ import com.ryq.coldstoragesystem.bean.Transport;
 import com.ryq.coldstoragesystem.mapper.TransportMapper;
 import com.ryq.coldstoragesystem.service.TransportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

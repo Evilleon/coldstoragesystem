@@ -4,7 +4,6 @@ import com.ryq.coldstoragesystem.bean.Transport;
 import com.ryq.coldstoragesystem.bean.User;
 import com.ryq.coldstoragesystem.service.TransportService;
 import com.ryq.coldstoragesystem.utils.VerifyData;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
