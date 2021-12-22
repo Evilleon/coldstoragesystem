@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ryq.common.room.entity.ItemInformation;
 import com.ryq.common.room.entity.RoomLabel;
+import com.ryq.common.room.entity.TempSaveItems;
 import com.ryq.common.utils.DateAndTimeStamp;
 import com.ryq.common.utils.GenerateIdentifier;
 import com.ryq.common.utils.VerifyData;

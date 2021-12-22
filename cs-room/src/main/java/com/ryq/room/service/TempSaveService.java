@@ -1,14 +1,13 @@
 package com.ryq.room.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ryq.coldstoragesystem.bean.TempSaveItems;
-import org.apache.ibatis.annotations.Param;
+import com.ryq.common.room.entity.TempSaveItems;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public interface TempSaveService extends IService<TempSaveItems> {
+public interface TempSaveService {
 
     //根据inspector得到信息
     public List<TempSaveItems> getAllByInspectorTempSaveItems(String inspector,String status);

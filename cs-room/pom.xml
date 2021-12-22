@@ -18,6 +18,26 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
+    <profiles>
+        <!-- 测试环境 -->
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!--当前环境-->
+                <profile.name>test</profile.name>
+                <!--nacos配置中心地址-->
+                <config.server-addr>114.116.109.177:8848</config.server-addr>
+                <!--nacos配置中心命名空间，必须使用id，默认为空-->
+                <config.namespace></config.namespace>
+                <!--nacos服务发现地址-->
+                <discovery.server-addr>114.116.109.177:8848</discovery.server-addr>
+                <!--nacos服务发现命名空间-->
+                <discovery.namespace></discovery.namespace>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
