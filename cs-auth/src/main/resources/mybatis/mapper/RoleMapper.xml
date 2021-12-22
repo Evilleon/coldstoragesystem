@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.ryq.renting.mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-com.ryq.renting.mapper.dtd">
+<com.ryq.renting.mapper namespace="com.ryq.auth.com.ryq.renting.mapper.sign.RoleMapper">
+
+    <select id="getAllRoleListByUsername" resultType="com.ryq.coldstoragesystem.bean.Role">
+        SELECT
+            r.*
+        FROM
+            role r
+            LEFT JOIN user_role ur ON r.id = ur.role_id
+            LEFT JOIN USER u ON ur.user_id = u.id
+        WHERE
+            u.user_name = #{userName};
+    </select>
+    <select id="getAllRoleList" resultType="com.ryq.coldstoragesystem.bean.Role">
+        select * from role
+    </select>
+</com.ryq.renting.mapper>

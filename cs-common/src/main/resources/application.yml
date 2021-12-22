@@ -20,8 +20,8 @@ spring:
 #    pet: asan
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mybatis/com.ryq.renting.mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
 mybatis-plus:
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mybatis/com.ryq.renting.mapper/*.xml

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.baidu.fsg.uid.worker.dao.WorkerNodeDAO">
+<!DOCTYPE com.ryq.renting.mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-com.ryq.renting.mapper.dtd">
+<com.ryq.renting.mapper namespace="com.baidu.fsg.uid.worker.dao.WorkerNodeDAO">
     <resultMap id="workerNodeRes"
                type="com.baidu.fsg.uid.worker.entity.WorkerNodeEntity">
         <id column="ID" jdbcType="BIGINT" property="id" />
@@ -44,4 +44,4 @@
         WHERE
         HOST_NAME = #{host} AND PORT = #{port}
     </select>
-</mapper>
+</com.ryq.renting.mapper>

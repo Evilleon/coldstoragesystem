@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.ryq.renting.mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-com.ryq.renting.mapper.dtd">
+<com.ryq.renting.mapper namespace="com.ryq.renting.mapper.WarehousingRecordMapper">
+
+    <select id="selectAllByOperatorWarehousingRecords"
+            resultType="com.ryq.coldstoragesystem.bean.WarehousingRecord">
+        select * from sjz_warehousing_record where operator=#{operator}
+    </select>
+    <select id="selectByItemName" resultType="com.ryq.coldstoragesystem.bean.WarehousingRecord">
+        select * from sjz_warehousing_record where item_name like "%"#{arg0}"%"
+    </select>
+    <select id="selectByRoomCode" resultType="com.ryq.coldstoragesystem.bean.WarehousingRecord">
+        select * from sjz_warehousing_record where room_code like "%"#{arg0}"%"
+    </select>
+    <select id="selectByItemNameAndOperator" resultType="com.ryq.coldstoragesystem.bean.WarehousingRecord">
+        select * from sjz_warehousing_record where item_name like "%"#{arg0}"%" and operator=#{arg1}
+    </select>
+    <select id="selectByRoomCodeAndOperator" resultType="com.ryq.coldstoragesystem.bean.WarehousingRecord">
+        select * from sjz_warehousing_record where room_code like "%"#{arg0}"%" and operator=#{arg1}
+    </select>
+</com.ryq.renting.mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.ryq.renting.mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-com.ryq.renting.mapper.dtd">
+<com.ryq.renting.mapper namespace="com.ryq.auth.com.ryq.renting.mapper.sign.LoginMapper">
+
+    <update id="updatePasswordByUserName">
+        update user set password=#{password},salt=#{salt} where user_name=#{userName}
+    </update>
+</com.ryq.renting.mapper>

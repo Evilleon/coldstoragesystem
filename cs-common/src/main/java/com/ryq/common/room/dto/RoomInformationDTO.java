@@ -1,9 +1,9 @@
 package com.ryq.common.room.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.ryq.common.utils.Valid;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import com.ryq.common.utils.Valid;
 
 
 @Data

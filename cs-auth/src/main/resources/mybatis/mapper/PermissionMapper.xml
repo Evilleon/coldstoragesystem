@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.ryq.renting.mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-com.ryq.renting.mapper.dtd">
+<com.ryq.renting.mapper namespace="com.ryq.auth.com.ryq.renting.mapper.sign.PermissionMapper">
+
+    <select id="getAllPermissionListByUsername" resultType="com.ryq.coldstoragesystem.bean.Permission">
+        SELECT
+            perm.*
+        FROM
+            permission perm
+            LEFT JOIN role_permission rp ON perm.id = rp.permission_id
+            LEFT JOIN role r ON rp.role_id = r.id
+            LEFT JOIN user_role ur ON r.id = ur.role_id
+            LEFT JOIN USER u ON u.id = ur.user_id
+        WHERE
+            u.user_name = #{userName};
+    </select>
+</com.ryq.renting.mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE com.ryq.renting.mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-com.ryq.renting.mapper.dtd">
+<com.ryq.renting.mapper namespace="com.ryq.renting.mapper.TransportMapper">
+    <insert id="insertTransport">
+        insert into transport(truck_type,max_bearing,rental_cost) value (#{truckType},#{maxBearing},#{rentalCost})
+    </insert>
+
+    <update id="updateTransportById">
+        update transport set truck_type=#{truckType},max_bearing=#{maxBearing},address=#{rental_cost} where id=#{id}
+    </update>
+
+    <delete id="deleteTransportById">
+        delete from transport where id=#{id}
+    </delete>
+
+    <select id="selectTransportById" resultType="com.ryq.coldstoragesystem.bean.Transport">
+        select * from transport where id=#{id}
+    </select>
+
+    <select id="selectAllTransport" resultType="com.ryq.coldstoragesystem.bean.Transport">
+        select * from transport
+    </select>
+    <select id="selectMinLessThanWeight" resultType="com.ryq.coldstoragesystem.bean.Transport">
+        SELECT * FROM transport where max_bearing=(SELECT min(max_bearing) FROM transport WHERE max_bearing>=#{weight})
+    </select>
+</com.ryq.renting.mapper>

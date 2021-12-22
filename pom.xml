@@ -7,7 +7,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>cs-common</module>
-        <module>cs-room</module>
+        <module>cs-renting</module>
+        <module>cs-auth</module>
+        <module>cs-transport</module>
     </modules>
     <name>coldstoragesystem</name>
     <description>Rebase The Coldstoragesystem</description>

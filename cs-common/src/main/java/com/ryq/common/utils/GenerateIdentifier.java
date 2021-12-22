@@ -1,8 +1,8 @@
 package com.ryq.common.utils;
 
 import cn.hutool.core.util.RandomUtil;
-import com.ryq.common.room.entity.User;
 import org.apache.shiro.SecurityUtils;
+import com.ryq.common.room.entity.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
